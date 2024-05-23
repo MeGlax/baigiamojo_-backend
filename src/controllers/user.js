@@ -35,13 +35,13 @@ const LOG_IN = async (req, res) => {
     if (!isPasswordMatch) {
       return res.status(500).json({ message: "Login unsuccessful" });
     }
-    console.log(process.env.JWT_SECRET);
     const jwt_token = jwt.sign({ user_id: user.id }, process.env.JWT_SECRET, {
       expiresIn: "24h",
     });
     // - čia paduodam email'ą ir id, bei slaptažodį, per kury encryptinam
     return res.json({
       jwt_token: jwt_token,
+      user_id: user.id,
       message: "User logged in successfully",
     });
   } catch (err) {
@@ -49,5 +49,27 @@ const LOG_IN = async (req, res) => {
     return res.status(500).json({ message: "error happened xd" });
   }
 };
+const GET_USERNAME_BY_USER_ID = async (req, res) => {
+  try {
+    const user = await UserModel.findById(req.params.userId);
+    return res.status(200).json({ username: user.name });
+  } catch (err) {
+    console.log("handled error: ", err);
+    return res
+      .status(404)
+      .json({ message: "User with such id does not exist" });
+  }
+};
+const VALIDATE_TOKEN = async (req, res) => {
+  try {
+    const user = await UserModel.findById(req.body.user_id);
+    return res.status(200).json({ user: user });
+  } catch (err) {
+    console.log("handled error: ", err);
+    return res
+      .status(404)
+      .json({ message: "User with such id does not exist" });
+  }
+};
 
-export { SIGN_UP, LOG_IN };
+export { SIGN_UP, LOG_IN, GET_USERNAME_BY_USER_ID, VALIDATE_TOKEN };

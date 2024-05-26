@@ -7,6 +7,7 @@ import {
   ANSWER_QUESTION,
   DELETE_ANSWER,
   FAVORITE,
+  GET_QUESTION_BY_ID,
 } from "../controllers/question.js";
 
 const router = express.Router();
@@ -25,4 +26,5 @@ router.put(
   authUser,
   FAVORITE
 );
+router.get("/question/:questionId", GET_QUESTION_BY_ID);
 export default router;

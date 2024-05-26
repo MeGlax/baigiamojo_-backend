@@ -139,7 +139,6 @@ const FAVORITE = async (req, res) => {
       const updatedFavorites = await questionModel.updateOne(
         { _id: questionId },
         { $set: { [`answers.${targetedAnswerId}.liked_by`]: newFavorites } }
-        // - čia naudojau chatgpt
       );
       return res.json({
         message: "unliked successfully",
@@ -152,7 +151,6 @@ const FAVORITE = async (req, res) => {
       const updatedFavorites = await questionModel.updateOne(
         { _id: questionId },
         { $set: { [`answers.${targetedAnswerId}.liked_by`]: newFavorites } }
-        // - čia naudojau chatgpt
       );
       return res.json({
         message: "liked successfully",
@@ -164,79 +162,15 @@ const FAVORITE = async (req, res) => {
     return res.status(500).json({ message: "error happened xd" });
   }
 };
-
-// const ADD_TICKET = async (req, res) => {
-//   try {
-//     const ticket = new ticketModel({
-//       title: req.body.title,
-//       ticket_price: req.body.ticket_price,
-//       from_location: req.body.from_location,
-//       to_location: req.body.to_location,
-//       to_location_photo_url: req.body.to_location_photo_url,
-//     });
-//     ticket.id = ticket._id.toString();
-//     const response = await ticket.save();
-//     return res
-//       .status(201)
-//       .json({ status: "ticket was added", response: response });
-//   } catch (err) {
-//     console.log("handled error: ", err);
-//     return res.status(500).json({ message: "error happened xd" });
-//   }
-// };
-// const GET_TICKETS = async (req, res) => {
-//   try {
-//     const tickets = await ticketModel.find();
-//     return res.json({ tickets: tickets });
-//   } catch (err) {
-//     console.log("handled error: ", err);
-//     return res.status(500).json({ message: "error happened xd" });
-//   }
-// };
-// const GET_PAGINATED_TICKETS = async (req, res) => {
-//   const pageSize = 5;
-//   try {
-//     const tickets = await ticketModel
-//       .find()
-//       .skip((Number(req.params.page) - 1) * pageSize)
-//       .limit(pageSize)
-//       .exec();
-//     return res.json({ tickets: tickets });
-//   } catch (err) {
-//     console.log("error handled :", err);
-//     return res.status(500).json({ message: "error happened xd" });
-//   }
-// };
-// const GET_TICKET_BY_ID = async (req, res) => {
-//   try {
-//     const ticket = await ticketModel.findById(req.params.id);
-//     return res.status(200).json({ ticket: ticket });
-//   } catch (err) {
-//     console.log("handled error: ", err);
-//     return res.status(500).json({ message: "error happened xd" });
-//   }
-// };
-// const UPDATE_TICKET_BY_ID = async (req, res) => {
-//   try {
-//     const ticket = await ticketModel.updateOne(
-//       { _id: req.params.id },
-//       { ...req.body }
-//     );
-//     return res.status(200).json({ message: "updated", ticket: ticket });
-//   } catch (err) {
-//     console.error("Error handled:", err);
-//     return res.status(500).json({ message: "An error occurred" });
-//   }
-// };
-// const DELETE_TICKET_BY_ID = async (req, res) => {
-//   try {
-//     const ticket = await ticketModel.findByIdAndDelete(req.params.id);
-//     return res.status(200).json({ ticket: ticket });
-//   } catch (err) {
-//     console.log("handled error: ", err);
-//     return res.status(500).json({ message: "error happened xd" });
-//   }
-// };
+const GET_QUESTION_BY_ID = async (req, res) => {
+  try {
+    const question = await questionModel.findById(req.params.questionId);
+    return res.status(200).json({ question: question });
+  } catch (err) {
+    console.log("handled error: ", err);
+    return res.status(500).json({ message: "error happened xd" });
+  }
+};
 
 export {
   GET_QUESTIONS,
@@ -245,4 +179,5 @@ export {
   ANSWER_QUESTION,
   DELETE_ANSWER,
   FAVORITE,
+  GET_QUESTION_BY_ID,
 };

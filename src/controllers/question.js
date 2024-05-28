@@ -117,10 +117,10 @@ const FAVORITE = async (req, res) => {
   const user_id = req.body.user_id;
   try {
     const question = await questionModel.findById(questionId);
-    const targetedAnswerId = question.answers.findIndex(
+    const targetedAnswerIndex = question.answers.findIndex(
       (answer) => answer.id === answerId
     );
-    const targetedAnswer = question.answers[targetedAnswerId];
+    const targetedAnswer = question.answers[targetedAnswerIndex];
     if (!targetedAnswer) {
       return res.status(404).json({ status: "answer not found" });
     }
@@ -134,11 +134,9 @@ const FAVORITE = async (req, res) => {
         return favorite !== user_id;
       });
 
-      question.answers[targetedAnswerId].liked_by = newFavorites;
-
       const updatedFavorites = await questionModel.updateOne(
         { _id: questionId },
-        { $set: { [`answers.${targetedAnswerId}.liked_by`]: newFavorites } }
+        { $set: { [`answers.${targetedAnswerIndex}.liked_by`]: newFavorites } }
       );
       return res.json({
         message: "unliked successfully",
@@ -147,10 +145,9 @@ const FAVORITE = async (req, res) => {
     } else if (!isFavorited) {
       const newFavorites = [...favorites, user_id];
 
-      question.answers[targetedAnswerId].liked_by = newFavorites;
       const updatedFavorites = await questionModel.updateOne(
         { _id: questionId },
-        { $set: { [`answers.${targetedAnswerId}.liked_by`]: newFavorites } }
+        { $set: { [`answers.${targetedAnswerIndex}.liked_by`]: newFavorites } }
       );
       return res.json({
         message: "liked successfully",
